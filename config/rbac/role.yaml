@@ -1,0 +1,148 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - aws.xyzcompany.com
+  resources:
+  - awsec2s
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - aws.xyzcompany.com
+  resources:
+  - awsec2s/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - aws.xyzcompany.com
+  resources:
+  - awsec2s/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - awsmanager.xyzcompany.com
+  resources:
+  - awsmanagers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - awsmanager.xyzcompany.com
+  resources:
+  - awsmanagers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - awsmanager.xyzcompany.com
+  resources:
+  - awsmanagers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - azure.xyzcompany.com
+  resources:
+  - azureavms
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - azure.xyzcompany.com
+  resources:
+  - azureavms/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - azure.xyzcompany.com
+  resources:
+  - azureavms/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - gcp.xyzcompany.com
+  resources:
+  - gcpgces
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - gcp.xyzcompany.com
+  resources:
+  - gcpgces/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - gcp.xyzcompany.com
+  resources:
+  - gcpgces/status
+  verbs:
+  - get
+  - patch
+  - update

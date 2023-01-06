@@ -1,0 +1,47 @@
+domain: xyzcompany.com
+layout:
+- go.kubebuilder.io/v3
+multigroup: true
+plugins:
+  manifests.sdk.operatorframework.io/v2: {}
+  scorecard.sdk.operatorframework.io/v2: {}
+projectName: vmstate-operator
+repo: github.com/talat-shaheen/vmstate-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: xyzcompany.com
+  group: azure
+  kind: AzureAVM
+  path: github.com/talat-shaheen/vmstate-operator/apis/azure/v1
+  version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: xyzcompany.com
+  group: gcp
+  kind: GCPGCE
+  path: github.com/talat-shaheen/vmstate-operator/apis/gcp/v1
+  version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: xyzcompany.com
+  group: aws
+  kind: AWSEC2
+  path: github.com/talat-shaheen/vmstate-operator/apis/aws/v1
+  version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: xyzcompany.com
+  group: awsmanager
+  kind: AWSManager
+  path: github.com/talat-shaheen/vmstate-operator/apis/awsmanager/v1
+  version: v1
+version: "3"
