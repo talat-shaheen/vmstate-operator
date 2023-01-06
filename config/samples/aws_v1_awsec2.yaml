@@ -1,0 +1,13 @@
+apiVersion: aws.xyzcompany.com/v1
+kind: AWSEC2
+metadata:
+  labels:
+    app.kubernetes.io/name: awsec2
+    app.kubernetes.io/instance: awsec2-sample
+    app.kubernetes.io/part-of: vmstate-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: vmstate-operator
+  name: awsec2-sample
+spec:
+  # TODO(user): Add fields here
+  image: "quay.io/talat_shaheen0/aws-vmstate:v1.0"
