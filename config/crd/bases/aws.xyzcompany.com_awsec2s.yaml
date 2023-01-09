@@ -35,7 +35,7 @@ spec:
           spec:
             description: AWSEC2Spec defines the desired state of AWSEC2
             properties:
-              foo:
+              image:
                 description: Foo is an example field of AWSEC2. Edit awsec2_types.go
                   to remove/update
                 type: string

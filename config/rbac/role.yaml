@@ -98,6 +98,19 @@ rules:
 - apiGroups:
   - batch
   resources:
+  - jobjobs
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - batch
+  resources:
   - jobs
   verbs:
   - create

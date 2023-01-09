@@ -12,8 +12,8 @@ github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_cont
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:94.17,97.4 2 0
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:100.8,100.23 1 0
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:100.23,103.3 2 0
-github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:146.151,297.2 5 0
-github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:300.73,305.2 1 0
+github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:146.151,235.2 7 0
+github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:238.73,243.2 1 0
 github.com/talat-shaheen/vmstate-operator/controllers/azure/azureavm_controller.go:49.100,55.2 2 0
 github.com/talat-shaheen/vmstate-operator/controllers/azure/azureavm_controller.go:58.71,62.2 1 0
 github.com/talat-shaheen/vmstate-operator/controllers/gcp/gcpgce_controller.go:49.98,55.2 2 0

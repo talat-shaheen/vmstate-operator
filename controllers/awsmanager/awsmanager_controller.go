@@ -148,12 +148,13 @@ func (r *AWSManagerReconciler) DeploymentForAWSManager(ctx context.Context, req 
 	var labels = map[string]string{
 		"app": req.NamespacedName.Name,
 	}
-	/*
-		var trueValue = true
 
-			log := ctrllog.FromContext(ctx)
-			log.Info("inside DeploymentForAWSManager")
-			log.Info(req.NamespacedName.Name,awsManager.Spec.Image)*/
+	//var trueValue = true
+
+	log := ctrllog.FromContext(ctx)
+	log.Info("Inside DeploymentForAWSManager")
+	//configMapData := make(map[string]string, 0)
+	//configMapData["config.json"] = "{}"
 	//fmt.Println("Details", awsManager.Name, awsManager.Namespace, awsManager.Spec.Image)
 	Deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -171,9 +172,23 @@ func (r *AWSManagerReconciler) DeploymentForAWSManager(ctx context.Context, req 
 					Labels: labels,
 				},
 				Spec: corev1.PodSpec{
+					/*Volumes: []corev1.Volume{{
+						Name: "config",
+						VolumeSource: corev1.VolumeSource{
+							ConfigMap: &corev1.ConfigMapVolumeSource{
+								LocalObjectReference: corev1.LocalObjectReference{
+									Name: "config",
+								},
+							},
+						},
+					}},*/
 					Containers: []corev1.Container{{
 						Name:  awsManager.Name,
 						Image: awsManager.Spec.Image,
+						/*VolumeMounts: []corev1.VolumeMount{{
+							Name:      "config",
+							MountPath: "/opt/config",
+						}},*/
 						Env: []corev1.EnvVar{
 							{
 								Name: "AWS_ACCESS_KEY_ID",
@@ -204,7 +219,7 @@ func (r *AWSManagerReconciler) DeploymentForAWSManager(ctx context.Context, req 
 										LocalObjectReference: corev1.LocalObjectReference{
 											Name: "aws-secret",
 										},
-										Key: "region",
+										Key: "aws-default-region",
 									},
 								},
 							}},
@@ -214,83 +229,6 @@ func (r *AWSManagerReconciler) DeploymentForAWSManager(ctx context.Context, req 
 			}, // PodTemplateSpec
 		}, // Spec
 	} // Deployment
-	/*Deployment := &appsv1.Deployment{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      awsManager.Name,
-			Namespace: awsManager.Namespace,
-			Labels:    labels,
-		},
-		Spec: appsv1.DeploymentSpec{
-			Replicas: &replica,
-			Selector: &metav1.LabelSelector{
-				MatchLabels: labels,
-			},
-			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels: labels,
-				},
-				Spec: corev1.PodSpec{
-					Volumes: []corev1.Volume{{
-						Name: "config-volume",
-						VolumeSource: corev1.VolumeSource{
-							ConfigMap: &corev1.ConfigMapVolumeSource{
-								LocalObjectReference: corev1.LocalObjectReference{
-									Name: "config",
-								},
-								Optional: &trueValue,
-							},
-						},
-					},
-					},
-					Containers: []corev1.Container{{
-						Name:  awsManager.Name,
-						Image: awsManager.Spec.Image,
-						VolumeMounts: []corev1.VolumeMount{{
-							Name:      "config-volume",
-							MountPath: "/opt",
-							SubPath:   "config.json",
-						}},
-
-						Env: []corev1.EnvVar{
-							{
-								Name: "AWS_ACCESS_KEY_ID",
-								ValueFrom: &corev1.EnvVarSource{
-									SecretKeyRef: &corev1.SecretKeySelector{
-										LocalObjectReference: corev1.LocalObjectReference{
-											Name: "aws-secret",
-										},
-										Key: "aws-access-key-id",
-									},
-								},
-							},
-							{
-								Name: "AWS_SECRET_ACCESS_KEY",
-								ValueFrom: &corev1.EnvVarSource{
-									SecretKeyRef: &corev1.SecretKeySelector{
-										LocalObjectReference: corev1.LocalObjectReference{
-											Name: "aws-secret",
-										},
-										Key: "aws-secret-access-key",
-									},
-								},
-							},
-							{
-								Name: "AWS_DEFAULT_REGION",
-								ValueFrom: &corev1.EnvVarSource{
-									SecretKeyRef: &corev1.SecretKeySelector{
-										LocalObjectReference: corev1.LocalObjectReference{
-											Name: "aws-secret",
-										},
-										Key: "region",
-									},
-								},
-							}},
-					}},
-					RestartPolicy: "Always",
-				},
-			},
-		},
-	}*/
 	// Set AWSManager instance as the owner and controller
 	ctrl.SetControllerReference(awsManager, Deployment, r.Scheme)
 	return Deployment

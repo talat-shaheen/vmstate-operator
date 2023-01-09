@@ -29,7 +29,7 @@ type AWSEC2Spec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of AWSEC2. Edit awsec2_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Image string `json:"image,omitempty"`
 }
 
 // AWSEC2Status defines the observed state of AWSEC2
