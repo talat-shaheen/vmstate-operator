@@ -1,6 +1,4 @@
 mode: set
-github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:49.98,55.2 2 0
-github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:58.69,62.2 1 0
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:57.102,67.16 5 0
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:80.2,89.42 5 0
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:142.2,142.27 1 0
@@ -14,6 +12,20 @@ github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_cont
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:100.23,103.3 2 0
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:146.151,235.2 7 0
 github.com/talat-shaheen/vmstate-operator/controllers/awsmanager/awsmanager_controller.go:238.73,243.2 1 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:56.98,71.16 6 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:84.2,93.42 4 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:187.2,187.27 1 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:71.16,72.29 1 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:80.3,81.28 2 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:72.29,78.4 2 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:93.42,98.17 4 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:103.3,103.41 1 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:98.17,101.4 2 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:104.8,104.23 1 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:104.23,107.3 2 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:191.76,252.2 3 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:254.67,260.2 1 0
+github.com/talat-shaheen/vmstate-operator/controllers/aws/awsec2_controller.go:263.69,268.2 1 0
 github.com/talat-shaheen/vmstate-operator/controllers/azure/azureavm_controller.go:49.100,55.2 2 0
 github.com/talat-shaheen/vmstate-operator/controllers/azure/azureavm_controller.go:58.71,62.2 1 0
 github.com/talat-shaheen/vmstate-operator/controllers/gcp/gcpgce_controller.go:49.98,55.2 2 0
