@@ -9,7 +9,7 @@ You’ll need a Kubernetes cluster to run against. You can use [KIND](https://si
 
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).
 
-**Pre-requisite** Need to login to any image registry and replace registry in the command below
+**Pre-requisite** Need to login to any image registry and replace registry in the command below & create a secret in the operator namespace with AWS environment variables
 ### Running on the cluster
 1. Install Instances of Custom Resources:
 
