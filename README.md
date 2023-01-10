@@ -6,8 +6,10 @@
 
 ## Getting Started
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
+
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).
 
+**Pre-requisite** Need to login to any image registry and replace registry in the command below
 ### Running on the cluster
 1. Install Instances of Custom Resources:
 
@@ -18,7 +20,10 @@ kubectl apply -f config/samples/
 2. Build and push your image to the location specified by `IMG`:
 	
 ```sh
-make docker-build docker-push IMG=<some-registry>/vmstate-operator:tag
+make generate;
+make manifests;
+make docker-build;
+sudo docker push quay.io/talat_shaheen0/vmstate-operator:latest;
 ```
 	
 3. Deploy the controller to the cluster with the image specified by `IMG`:
