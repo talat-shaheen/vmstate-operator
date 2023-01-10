@@ -30,6 +30,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	ctrllog "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
@@ -41,8 +42,8 @@ type AWSEC2Reconciler struct {
 
 //+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsec2s,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsec2s/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsec2s/finalizers,verbs=update
-//+kubebuilder:rbac:groups=batch,resources=jobjobs;jobs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=aws.xyzcompany.com,resources=awsec2s/finalizers,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=batch,resources=jobs/finalizers;jobs,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -53,18 +54,21 @@ type AWSEC2Reconciler struct {
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.13.0/pkg/reconcile
+
+const AWSEC2Finalizer = "aws.xyzcompany.com/finalizer"
+
 func (r *AWSEC2Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	//_ = log.FromContext(ctx)
 	log := ctrllog.FromContext(ctx)
 	//log := r.Log.WithValues("AWSEC2", req.NamespacedName)
-	log.Info("Reconciling AWSEC2")
+	log.Info("Reconciling AWSEC2s CRs")
 
 	// Fetch the AWSEC2 CR
 	//awsEC2, err := services.FetchAWSEC2CR(req.Name, req.Namespace)
 
 	// Fetch the AWSEC2 instance
 	awsEC2 := &awsv1.AWSEC2{}
-
+	//ctrl.SetControllerReference(awsEC2, awsEC2, r.Scheme)
 	log.Info(req.NamespacedName.Name)
 
 	err := r.Client.Get(ctx, req.NamespacedName, awsEC2)
@@ -81,25 +85,24 @@ func (r *AWSEC2Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, err
 	}
 
-	log.Info(awsEC2.Name)
 	// Add const values for mandatory specs ( if left blank)
 	// log.Info("Adding awsEC2 mandatory specs")
 	// utils.AddBackupMandatorySpecs(awsEC2)
 	// Check if the jobJob already exists, if not create a new one
 
 	found := &batchv1.Job{}
-	err = r.Client.Get(ctx, types.NamespacedName{Name: awsEC2.Name, Namespace: awsEC2.Namespace}, found)
+	err = r.Client.Get(ctx, types.NamespacedName{Name: awsEC2.Name + "create", Namespace: awsEC2.Namespace}, found)
 	//log.Info(*found.)
 	if err != nil && errors.IsNotFound(err) {
-		// Define a new jobJob
-		job := r.JobForAWSEC2(awsEC2)
+		// Define a new Job
+		job := r.JobForAWSEC2(awsEC2, "create")
 		log.Info("Creating a new Job", "job.Namespace", job.Namespace, "job.Name", job.Name)
 		err = r.Client.Create(ctx, job)
 		if err != nil {
 			log.Error(err, "Failed to create new Job", "job.Namespace", job.Namespace, "job.Name", job.Name)
 			return ctrl.Result{}, err
 		}
-		// jobjob created successfully - return and requeue
+		// job created successfully - return and requeue
 		return ctrl.Result{Requeue: true}, nil
 	} else if err != nil {
 		log.Error(err, "Failed to get job")
@@ -183,28 +186,94 @@ func (r *AWSEC2Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 			return ctrl.Result{}, err
 		}
 	}*/
+	// Check if the AWSEC2 instance is marked to be deleted, which is
+	// indicated by the deletion timestamp being set.
+	isAWSEC2MarkedToBeDeleted := awsEC2.GetDeletionTimestamp() != nil
+	if isAWSEC2MarkedToBeDeleted {
+		if controllerutil.ContainsFinalizer(awsEC2, AWSEC2Finalizer) {
+			// Run finalization logic for AWSEC2Finalizer. If the
+			// finalization logic fails, don't remove the finalizer so
+			// that we can retry during the next reconciliation.
+			log.Info(awsEC2.Name)
+			log.Info("CR is marked for deletion")
+			if err := r.finalizeAWSEC2(ctx, awsEC2); err != nil {
+				return ctrl.Result{}, err
+			}
+
+			// Remove AWSEC2Finalizer. Once all finalizers have been
+			// removed, the object will be deleted.
+			controllerutil.RemoveFinalizer(awsEC2, AWSEC2Finalizer)
+			err := r.Client.Update(ctx, awsEC2)
+			if err != nil {
+				return ctrl.Result{}, err
+			}
+			log.Info("Finalizer removed")
+			log.Info(awsEC2.Name)
+		}
+		return ctrl.Result{}, nil
+	}
+
+	// Add finalizer for this CR
+	if !controllerutil.ContainsFinalizer(awsEC2, AWSEC2Finalizer) {
+		log.Info("Finalizer added again")
+		log.Info(awsEC2.Name)
+		controllerutil.AddFinalizer(awsEC2, AWSEC2Finalizer)
+		err = r.Client.Update(ctx, awsEC2)
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+	}
 
 	return ctrl.Result{}, nil
 }
+func (r *AWSEC2Reconciler) finalizeAWSEC2(ctx context.Context, awsEC2 *awsv1.AWSEC2) error {
+	// TODO(user): Add the cleanup steps that the operator
+	// needs to do before the CR can be deleted. Examples
+	// of finalizers include performing backups and deleting
+	// resources that are not owned by this CR, like a PVC.
+	log := ctrllog.FromContext(ctx)
+	log.Info("Successfully finalized AWSEC2")
+	found := &batchv1.Job{}
+	err := r.Client.Get(ctx, types.NamespacedName{Name: awsEC2.Name + "delete", Namespace: awsEC2.Namespace}, found)
+	//log.Info(*found.)
+	if err != nil && errors.IsNotFound(err) {
+		// Define a new job
+		job := r.JobForAWSEC2(awsEC2, "delete")
+		log.Info("Creating a new Job", "job.Namespace", job.Namespace, "job.Name", job.Name)
+		err = r.Client.Create(ctx, job)
+		if err != nil {
+			log.Error(err, "Failed to create new Job", "job.Namespace", job.Namespace, "job.Name", job.Name)
+			return err
+		}
+		// job created successfully - return and requeue
+		return nil
+	} else if err != nil {
+		log.Error(err, "Failed to get job")
+		return err
+	}
+	return nil
+}
 
 // Job Spec
-func (r *AWSEC2Reconciler) JobForAWSEC2(awsEC2 *awsv1.AWSEC2) *batchv1.Job {
-
+func (r *AWSEC2Reconciler) JobForAWSEC2(awsEC2 *awsv1.AWSEC2, command string) *batchv1.Job {
+	jobName := awsEC2.Name + command
 	job := &batchv1.Job{
 		ObjectMeta: v1.ObjectMeta{
-			Name:      awsEC2.Name,
+			Name:      jobName,
 			Namespace: awsEC2.Namespace,
 			Labels:    AWSEC2Labels(awsEC2, "awsEC2"),
 		},
 		Spec: batchv1.JobSpec{
-			//JobTemplate: batchv1.JobTemplateSpec{
-			//	Spec: batchv1.JobSpec{
 			Template: corev1.PodTemplateSpec{
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{{
 						Name:  awsEC2.Name,
 						Image: awsEC2.Spec.Image,
 						Env: []corev1.EnvVar{
+							{
+								Name:  "ec2_command",
+								Value: command,
+							},
 							{
 								Name: "AWS_ACCESS_KEY_ID",
 								ValueFrom: &corev1.EnvVarSource{
@@ -241,8 +310,6 @@ func (r *AWSEC2Reconciler) JobForAWSEC2(awsEC2 *awsv1.AWSEC2) *batchv1.Job {
 					}},
 					RestartPolicy: "OnFailure",
 				},
-				//},
-				//},
 			},
 		},
 	}
