@@ -17,7 +17,7 @@ You’ll need a Kubernetes cluster to run against. You can use [KIND](https://si
 kubectl apply -f config/samples/
 ```
 
-2. Build and push your image to the location specified by `IMG`:
+2. Build and push your image:
 	
 ```sh
 make generate;
@@ -26,10 +26,10 @@ make docker-build;
 sudo docker push quay.io/talat_shaheen0/vmstate-operator:latest;
 ```
 	
-3. Deploy the controller to the cluster with the image specified by `IMG`:
+3. Deploy the controller to the cluster:
 
 ```sh
-make deploy IMG=<some-registry>/vmstate-operator:tag
+make deploy quay.io/talat_shaheen0/vmstate-operator:tag
 ```
 
 ### Uninstall CRDs
