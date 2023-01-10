@@ -10,28 +10,49 @@ You’ll need a Kubernetes cluster to run against. You can use [KIND](https://si
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).
 
 **Pre-requisite** Need to login to any image registry and replace registry in the command below & create a secret in the operator namespace with AWS environment variables
-### Running on the cluster
-1. Install Instances of Custom Resources:
-
-```sh
-kubectl apply -f config/samples/
 ```
-
-2. Build and push your image:
+kubectl create secret generic aws-secret --from-literal=region=us-east-1 --from-literal=aws-secret-access-key=<secret access key> --from-literal=aws-access-key-id=<secret access key id>
+```
+### Running on the cluster
+1. Build and push your image:
 	
 ```sh
-make generate;
-make manifests;
+make generate;make manifests;
 make docker-build;
 sudo docker push quay.io/talat_shaheen0/vmstate-operator:latest;
 ```
+OR
+
+```
+make generate;make manifests;
+make docker-build docker-push IMG="quay.io/talat_shaheen0/vmstate-operator:latest"
+make deploy IMG="quay.io/talat_shaheen0/vmstate-operator:latest"
+```
 	
-3. Deploy the controller to the cluster:
+2. Deploy the controller to the cluster:
 
 ```sh
 make deploy quay.io/talat_shaheen0/vmstate-operator:tag
 ```
 
+3. Apply Custom Resources:
+
+```sh
+kubectl apply -f config/samples/awsmanager_v1_awsmanager.yaml -n vmstate-operator-system;
+kubectl apply -f config/samples/aws_v1_awsec2.yaml -n vmstate-operator-system;
+```
+3. Check jobs & AWSEC2:
+
+```
+kubectl get jobs -n vmstate-operator-system;
+kubectl get awsec2 -n vmstate-operator-system;
+```
+
+4. Delete CR:
+
+```
+kubectl delete awsec2 <xyz> -n vmstate-operator-system;
+```
 ### Uninstall CRDs
 To delete the CRDs from the cluster:
 
