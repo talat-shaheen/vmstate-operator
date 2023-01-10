@@ -197,52 +197,52 @@ func (r *AWSEC2Reconciler) JobForAWSEC2(awsEC2 *awsv1.AWSEC2) *batchv1.Job {
 			Labels:    AWSEC2Labels(awsEC2, "awsEC2"),
 		},
 		Spec: batchv1.JobSpec{
-			JobTemplate: batchv1.JobTemplateSpec{
-				Spec: batchv1.JobSpec{
-					Template: corev1.PodTemplateSpec{
-						Spec: corev1.PodSpec{
-							Containers: []corev1.Container{{
-								Name:  awsEC2.Name,
-								Image: awsEC2.Spec.Image,
-								Env: []corev1.EnvVar{
-									{
-										Name: "AWS_ACCESS_KEY_ID",
-										ValueFrom: &corev1.EnvVarSource{
-											SecretKeyRef: &corev1.SecretKeySelector{
-												LocalObjectReference: corev1.LocalObjectReference{
-													Name: "aws-secret",
-												},
-												Key: "aws-access-key-id",
-											},
+			//JobTemplate: batchv1.JobTemplateSpec{
+			//	Spec: batchv1.JobSpec{
+			Template: corev1.PodTemplateSpec{
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{{
+						Name:  awsEC2.Name,
+						Image: awsEC2.Spec.Image,
+						Env: []corev1.EnvVar{
+							{
+								Name: "AWS_ACCESS_KEY_ID",
+								ValueFrom: &corev1.EnvVarSource{
+									SecretKeyRef: &corev1.SecretKeySelector{
+										LocalObjectReference: corev1.LocalObjectReference{
+											Name: "aws-secret",
 										},
+										Key: "aws-access-key-id",
 									},
-									{
-										Name: "AWS_SECRET_ACCESS_KEY",
-										ValueFrom: &corev1.EnvVarSource{
-											SecretKeyRef: &corev1.SecretKeySelector{
-												LocalObjectReference: corev1.LocalObjectReference{
-													Name: "aws-secret",
-												},
-												Key: "aws-secret-access-key",
-											},
+								},
+							},
+							{
+								Name: "AWS_SECRET_ACCESS_KEY",
+								ValueFrom: &corev1.EnvVarSource{
+									SecretKeyRef: &corev1.SecretKeySelector{
+										LocalObjectReference: corev1.LocalObjectReference{
+											Name: "aws-secret",
 										},
+										Key: "aws-secret-access-key",
 									},
-									{
-										Name: "AWS_DEFAULT_REGION",
-										ValueFrom: &corev1.EnvVarSource{
-											SecretKeyRef: &corev1.SecretKeySelector{
-												LocalObjectReference: corev1.LocalObjectReference{
-													Name: "aws-secret",
-												},
-												Key: "aws-default-region",
-											},
+								},
+							},
+							{
+								Name: "AWS_DEFAULT_REGION",
+								ValueFrom: &corev1.EnvVarSource{
+									SecretKeyRef: &corev1.SecretKeySelector{
+										LocalObjectReference: corev1.LocalObjectReference{
+											Name: "aws-secret",
 										},
-									}},
+										Key: "aws-default-region",
+									},
+								},
 							}},
-							RestartPolicy: "OnFailure",
-						},
-					},
+					}},
+					RestartPolicy: "OnFailure",
 				},
+				//},
+				//},
 			},
 		},
 	}
