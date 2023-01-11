@@ -1,18 +1,38 @@
 # vmstate-operator
-// TODO(user): Add simple overview of use/purpose
+This Operator will manage the state of cloud resources from kubernetes environment. Right now this only supports VMs on AWS. In future, other cloud services can be included and for various other cloud platforms like GCp, Azure etc.
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+There are two CRs that need to created.
+First CR will be the manager pod that will keep on watching the state of the cloud resources and take corrective action if that does not match. 
+Second CR will create the cloud resource that is supposed to be managed. Upon deletion of the CR, the resource is suposed to be deleted.
 
 ## Getting Started
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
 
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).
 
-**Pre-requisite** Need to login to any image registry and replace registry in the command below & create a secret in the operator namespace with AWS environment variables
+Install operator-sdk & golang.
+
+Need to login to any image registry and replace registry in the command below & create a secret in the operator namespace with AWS environment variables
+
 ```
-kubectl create secret generic aws-secret --from-literal=region=us-east-1 --from-literal=aws-secret-access-key=<secret access key> --from-literal=aws-access-key-id=<secret access key id>
+git clone <XYZ>
+cd <XYZ>
+git branch -b <branch name>
+go mod init github.com/talat-shaheen/<XYZ>
+go mod tidy
+operator-sdk init --domain xyzcompany.com --repo github.com/talat-shaheen/<XYZ>
+operator-sdk edit --multigroup=true
+operator-sdk create api     --group=Azure     --version=v1     --kind=<XYZ>AzureAVM
+operator-sdk create api     --group=gcp     --version=v1     --kind=<XYZ>GCPGCE
+operator-sdk create api     --group=aws     --version=v1     --kind=<XYZ>AWSEC2
+git add *
+git commit -m"...."
+git push origin <branch name>
 ```
+
+
+
 ### Running on the cluster
 1. Build and push your image:
 	
@@ -35,9 +55,10 @@ make deploy IMG="quay.io/talat_shaheen0/vmstate-operator:latest"
 make deploy quay.io/talat_shaheen0/vmstate-operator:tag
 ```
 
-3. Apply Custom Resources:
+3. Apply Custom Resources & create secret:
 
 ```sh
+kubectl create secret generic aws-secret --from-literal=region=us-east-1 --from-literal=aws-secret-access-key=<secret access key> --from-literal=aws-access-key-id=<secret access key id>
 kubectl apply -f config/samples/awsmanager_v1_awsmanager.yaml -n vmstate-operator-system;
 kubectl apply -f config/samples/aws_v1_awsec2.yaml -n vmstate-operator-system;
 ```
