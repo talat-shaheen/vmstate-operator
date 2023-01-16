@@ -54,7 +54,7 @@ make deploy IMG="quay.io/talat_shaheen0/vmstate-operator:latest"
 2. Deploy the controller to the cluster:
 
 ```sh
-make deploy quay.io/talat_shaheen0/vmstate-operator:tag
+make deploy IMG="quay.io/talat_shaheen0/vmstate-operator:tag"
 ```
 
 3. Apply Custom Resources & create secret:
