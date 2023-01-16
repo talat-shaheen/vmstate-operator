@@ -69,18 +69,14 @@ kubectl apply -f config/samples/aws_v1_awsec2.yaml -n vmstate-operator-system;
 ```
 kubectl get jobs -n vmstate-operator-system;
 kubectl get awsec2 -n vmstate-operator-system;
+kubectl get awsmanager -n vmstate-operator-system;
 ```
 
 4. Delete CR:
 
 ```
 kubectl delete awsec2 <xyz> -n vmstate-operator-system;
-```
-### Uninstall CRDs
-To delete the CRDs from the cluster:
-
-```sh
-make uninstall
+kubectl delete awsmanager -n vmstate-operator-system;
 ```
 
 ### Undeploy controller
