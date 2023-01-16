@@ -1,10 +1,13 @@
 # vmstate-operator
-This Operator will manage the state of cloud resources from kubernetes environment. Right now this only supports VMs on AWS. In future, other cloud services can be included and for various other cloud platforms like GCp, Azure etc.
+This Operator will manage the state of cloud resources from kubernetes environment. Right now this only supports VMs on AWS. In future, other cloud services can be included and for various other cloud platforms like GCP, Azure etc.
 
 ## Description
 There are two CRs that need to created.
 First CR will be the manager pod that will keep on watching the state of the cloud resources and take corrective action if that does not match. 
 Second CR will create the cloud resource that is supposed to be managed. Upon deletion of the CR, the resource is suposed to be deleted.
+
+![image](https://user-images.githubusercontent.com/36874355/212597610-eb324dee-25ea-4d87-b341-035643d83270.png)
+
 
 ## Getting Started
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
