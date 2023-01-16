@@ -6,8 +6,7 @@ There are two CRs that need to created.
 First CR will be the manager pod that will keep on watching the state of the cloud resources and take corrective action if that does not match. 
 Second CR will create the cloud resource that is supposed to be managed. Upon deletion of the CR, the resource is suposed to be deleted.
 
-![image](https://user-images.githubusercontent.com/36874355/212597610-eb324dee-25ea-4d87-b341-035643d83270.png)
-
+![image](https://user-images.githubusercontent.com/36874355/212598021-01716c9f-ea1a-4f11-b106-777781de06f0.png)
 
 ## Getting Started
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
