@@ -18,16 +18,16 @@ Install operator-sdk & golang.
 Need to login to any image registry and replace registry in the command below & create a secret in the operator namespace with AWS environment variables
 
 ```
-git clone <XYZ>
-cd <XYZ>
+git clone <your-repo>
+cd <your-repo>
 git branch -b <branch name>
-go mod init github.com/talat-shaheen/<XYZ>
+go mod init github.com/<your-repo>
 go mod tidy
-operator-sdk init --domain xyzcompany.com --repo github.com/talat-shaheen/<XYZ>
+operator-sdk init --domain <your-name>.com --repo github.com/<your-repo>
 operator-sdk edit --multigroup=true
-operator-sdk create api     --group=Azure     --version=v1     --kind=<XYZ>AzureAVM
-operator-sdk create api     --group=gcp     --version=v1     --kind=<XYZ>GCPGCE
-operator-sdk create api     --group=aws     --version=v1     --kind=<XYZ>AWSEC2
+operator-sdk create api     --group=Azure     --version=v1     --kind=<your-name>AzureAVM
+operator-sdk create api     --group=gcp     --version=v1     --kind=<your-name>GCPGCE
+operator-sdk create api     --group=aws     --version=v1     --kind=<your-name>AWSEC2
 git add *
 git commit -m"...."
 git push origin <branch name>
@@ -41,20 +41,20 @@ git push origin <branch name>
 ```sh
 make generate;make manifests;
 make docker-build;
-sudo docker push quay.io/talat_shaheen0/vmstate-operator:latest;
+sudo docker push quay.io/<your-registry>/vmstate-operator:latest;
 ```
 OR
 
 ```
 make generate;make manifests;
-make docker-build docker-push IMG="quay.io/talat_shaheen0/vmstate-operator:latest"
-make deploy IMG="quay.io/talat_shaheen0/vmstate-operator:latest"
+make docker-build docker-push IMG="quay.io/<your-registry>/vmstate-operator:latest"
+make deploy IMG="quay.io/<your-registry>/vmstate-operator:latest"
 ```
 	
 2. Deploy the controller to the cluster:
 
 ```sh
-make deploy IMG="quay.io/talat_shaheen0/vmstate-operator:tag"
+make deploy IMG="quay.io/<your-registry>/vmstate-operator:tag"
 ```
 
 3. Apply Custom Resources & create secret:
@@ -64,7 +64,7 @@ kubectl create secret generic aws-secret --from-literal=region=us-east-1 --from-
 kubectl apply -f config/samples/awsmanager_v1_awsmanager.yaml -n vmstate-operator-system;
 kubectl apply -f config/samples/aws_v1_awsec2.yaml -n vmstate-operator-system;
 ```
-3. Check jobs & AWSEC2:
+3. Check jobs & AWSEC2/AWSManager resources:
 
 ```
 kubectl get jobs -n vmstate-operator-system;
@@ -75,8 +75,8 @@ kubectl get awsmanager -n vmstate-operator-system;
 4. Delete CR:
 
 ```
-kubectl delete awsec2 <xyz> -n vmstate-operator-system;
-kubectl delete awsmanager -n vmstate-operator-system;
+kubectl delete awsec2 <cr-name> -n vmstate-operator-system;
+kubectl delete awsmanager <cr-name> -n vmstate-operator-system;
 ```
 
 ### Undeploy controller
@@ -94,28 +94,6 @@ This project aims to follow the Kubernetes [Operator pattern](https://kubernetes
 
 It uses [Controllers](https://kubernetes.io/docs/concepts/architecture/controller/) 
 which provides a reconcile function responsible for synchronizing resources untile the desired state is reached on the cluster 
-
-### Test It Out
-1. Install the CRDs into the cluster:
-
-```sh
-make install
-```
-
-2. Run your controller (this will run in the foreground, so switch to a new terminal if you want to leave it running):
-
-```sh
-make run
-```
-
-**NOTE:** You can also run this in one step by running: `make install run`
-
-### Modifying the API definitions
-If you are editing the API definitions, generate the manifests such as CRs or CRDs using:
-
-```sh
-make manifests
-```
 
 **NOTE:** Run `make --help` for more information on all potential `make` targets
 
