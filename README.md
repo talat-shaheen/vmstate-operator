@@ -28,6 +28,7 @@ operator-sdk edit --multigroup=true
 operator-sdk create api     --group=Azure     --version=v1     --kind=<your-name>AzureAVM
 operator-sdk create api     --group=gcp     --version=v1     --kind=<your-name>GCPGCE
 operator-sdk create api     --group=aws     --version=v1     --kind=<your-name>AWSEC2
+operator-sdk create api     --group=aws     --version=v1     --kind=<your-name>AWSEC2Manager
 git add *
 git commit -m"...."
 git push origin <branch name>
