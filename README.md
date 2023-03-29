@@ -20,7 +20,7 @@ Need to login to any image registry and replace registry in the command below & 
 ```
 git clone <your-repo>
 cd <your-repo>
-git branch -b <branch name>
+git checkout -b <new branch name>
 go mod init github.com/<your-repo>
 go mod tidy
 operator-sdk init --domain <your-name>.com --repo github.com/<your-repo>
@@ -31,7 +31,7 @@ operator-sdk create api     --group=aws     --version=v1     --kind=<your-name>A
 operator-sdk create api     --group=awsmanager     --version=v1     --kind=<your-name>AWSManager
 git add *
 git commit -m"...."
-git push origin <branch name>
+git push origin < new branch name>
 ```
 
 
