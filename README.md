@@ -49,7 +49,6 @@ OR
 ```
 make generate;make manifests;
 make docker-build docker-push IMG="quay.io/<your-registry>/vmstate-operator:latest"
-make deploy IMG="quay.io/<your-registry>/vmstate-operator:latest"
 ```
 	
 2. Deploy the controller to the cluster:
@@ -80,39 +79,24 @@ kubectl delete awsec2 <cr-name> -n vmstate-operator-system;
 kubectl delete awsmanager <cr-name> -n vmstate-operator-system;
 ```
 
-### Undeploy controller
-UnDeploy the controller to the cluster:
+5. Undeploy controller:
 
-```sh
+```
 make undeploy
+```
+## TODO: Few features that can be enhanced in minimal time
+
+```
+1.Set restart policy for Manager CR & image pull policy for EC2 CR
+2.Modify to take customized tag as input form CR. Modify types.go/sample CR file [will be aplicable to both the CRDs]
+3.Modify to take AMI & Instance type as configmap from file. Focus only on t2 series for testing
+4.Minimize the image footprint by using ubi-minimal for Manager & EC2 CR
+5.Fill in the delete instance stub
+6.Set the status of the EC2 CR [For example: in-progress, created, terminated]
+7.Apply change for instanceType, watch configmap for any changes- only for EC2 CR
+
 ```
 
 ## Contributing
-// TODO(user): Add detailed information on how you would like others to contribute to this project
-
-### How it works
-This project aims to follow the Kubernetes [Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/)
-
-It uses [Controllers](https://kubernetes.io/docs/concepts/architecture/controller/) 
-which provides a reconcile function responsible for synchronizing resources untile the desired state is reached on the cluster 
-
-**NOTE:** Run `make --help` for more information on all potential `make` targets
-
-More information can be found via the [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
-
-## License
-
-Copyright 2023.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+This project can be extended for various other cloud services for different cloud providers  
 
