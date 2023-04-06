@@ -100,3 +100,9 @@ make undeploy
 ## Contributing
 This project can be extended for various other cloud services for different cloud providers  
 
+## Repositories for AWS Manager & AWS EC2 CRDs
+```
+https://github.com/talat-shaheen/aws-vmcreate
+https://github.com/talat-shaheen/aws-vmstate
+```
+
