@@ -88,8 +88,8 @@ make undeploy
 
 ```
 1.Set restart policy for Manager CR & image pull policy for EC2 CR
-2.Modify to take customized tag as input form CR. Modify types.go/sample CR file [will be aplicable to both the CRDs]
-3.Modify to take AMI & Instance type as configmap from file. Focus only on t2 series for testing
+2.Modify code to take customized tag as input form CR. Modify types.go/sample CR file [will be aplicable to both the CRDs]
+3.Modify code to take AMI & Instance type from configmap. Create cm from file. Focus only on t2 series for testing
 4.Minimize the image footprint by using ubi-minimal for Manager & EC2 CR
 5.Fill in the delete instance stub
 6.Set the status of the EC2 CR [For example: in-progress, created, terminated]
